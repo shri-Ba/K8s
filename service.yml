@@ -104,8 +104,8 @@ spec:
 
 #NodePort: Only accessible from inside the Minikube VM or using minikube service.
 
-LoadBalancer: Only works after minikube tunnel.
+#LoadBalancer: Only works after minikube tunnel.
 
-ClusterIP: Internal only. 
+#ClusterIP: Internal only. 
 
-ExternalName: Maps DNS; doesn’t expose pods.
+#ExternalName: Maps DNS; doesn’t expose pods.
