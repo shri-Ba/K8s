@@ -10,3 +10,102 @@ spec:
       port: 80
       targetPort: 80
   type: NodePort
+
+
+#1️⃣ ClusterIP (default)
+
+#Scope: Internal to the cluster only.
+
+#Use case: Pods communicate with each other inside the cluster.
+
+#Example: Nginx pod talks to another app pod.
+
+#Access from outside: ❌ Not accessible from outside the cluster.
+
+#spec:
+#  type: ClusterIP  # default
+#  ports:
+#    - port: 80
+#      targetPort: 80
+#
+
+#Minikube: Works inside Minikube only.
+
+#EC2 cloud cluster: Only reachable inside cluster nodes.
+
+#2️⃣ NodePort
+
+#Scope: Opens a high port (30000–32767) on every node in the cluster.
+
+#Use case: Quick way to expose a service outside the cluster.
+
+#Access from outside:
+#http://<node-IP>:<nodePort>
+
+#spec:
+#  type: NodePort
+#  ports:
+#    - port: 80
+#      targetPort: 80
+#      nodePort: 32232
+
+
+#Minikube: NodePort is only reachable inside the Minikube VM, not your EC2 public IP.
+
+#Real multi-node cloud cluster: NodePort works on any node’s external IP.
+
+#3️⃣ LoadBalancer
+
+#Scope: Cloud-native load balancer (AWS ELB, GCP LB, etc.)
+
+#Use case: Publicly accessible service with one IP.
+
+#Access from outside: http://<external-IP>
+
+#Example: Web service exposed to the internet in AWS, GCP, or Azure.
+
+#spec:
+#  type: LoadBalancer
+#  ports:
+#    - port: 80
+#      targetPort: 80
+
+
+#Minikube: Doesn’t automatically give a cloud LB; you need minikube tunnel.
+
+#AWS EKS / GCP / Azure: Automatically provisions a cloud LB.
+
+#4️⃣ ExternalName
+
+#Scope: Maps a Kubernetes service to an external DNS name.
+
+#Use case: When you want a service in your cluster to point to something outside (like mydatabase.example.com)
+
+#Access from outside: Not for exposing pods, just internal cluster DNS mapping.
+
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mydb
+#spec:
+#  type: ExternalName
+#  externalName: database.example.com
+
+
+#This does not create a NodePort or LB.
+
+#Summary Table
+#Service Type	Externally Accessible?	Use Case
+#ClusterIP	❌ No	Pod-to-pod internal communication
+#NodePort	✅ Yes, via node IP + port	Quick dev/test exposure, works on any node IP
+#LoadBalancer	✅ Yes, via cloud LB IP	Production cloud exposure to Internet
+#ExternalName	❌ No	Internal alias to external DNS
+#Key Minikube Note
+
+#NodePort: Only accessible from inside the Minikube VM or using minikube service.
+
+LoadBalancer: Only works after minikube tunnel.
+
+ClusterIP: Internal only. 
+
+ExternalName: Maps DNS; doesn’t expose pods.
